@@ -21,7 +21,7 @@ gatherData <- function(type = 'test') {
   # name, since we're only extacting mean and std deviation columns.
   X_values <- read.table(X_path, header = FALSE, col.names=features[,'label'])
   
-  required_X_columns <- grepl("(mean)|(std)", names(X_values))
+  required_X_columns <- grepl("(mean)|(std)", names(X_values), ignore.case=TRUE)
   X_values <- X_values[,required_X_columns]
   
   y_values <- read.table(y_path, header = FALSE, col.names=c("activitynumber"))
@@ -44,3 +44,21 @@ gatherData <- function(type = 'test') {
   # Return the clean data set
   clean_dataset
 }
+
+test_data <- gatherData('test')
+train_data <- gatherData('train')
+
+merged_data <- rbind(test_data, train_data)
+
+# Beautify column names
+names(merged_data) <- sub("([.]{2,})|([.]+$)", "", names(merged_data))
+
+# Create the tidy data set by activityname and subjectnumber
+# Ignore columns 1 and 88, which is the activityname and subjectnumber itself
+tidy_data <- aggregate(merged_data[,2:87],
+                       by=list(activityname=merged_data$activityname,
+                               subjectnumber=merged_data$subjectnumber),
+                       mean)
+
+# Write the tidy output to a file
+write.table(tidy_data, "tidy_data.txt", row.names=FALSE)
