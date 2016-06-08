@@ -2,6 +2,8 @@
 
 The following variables are used. Most of the definitions are the same as mentioned in the features.txt and features_info.txt files.
 
+**Units of gravity are in (g) and that of frequency domain in (rad/s)**
+
 1. **activityname**: Name of the activity
 1. **subjectnumber**: The human subject's number
 1. **tBodyAcc.meanX**: X-axis mean of body acceleration in time domain
